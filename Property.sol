@@ -2,8 +2,6 @@
 pragma solidity ^0.8.7;
 
 contract Property {
-    event Log (uint amount, uint gas);
-
     struct Doc {
         uint price;
         string name;
