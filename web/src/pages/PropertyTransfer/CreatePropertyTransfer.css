@@ -1,0 +1,58 @@
+.create-property-transfer-page {
+  background-color: #282c34;
+  color: #e7e7e7;
+}
+
+.create-property-transfer-page > div > form {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  border-radius: 12px;
+}
+
+.create-property-transfer-page > div > form > label {
+  margin-bottom: 8px;
+}
+
+.create-property-transfer-page > div > form > input {
+  padding: 8px 8px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.enter {
+  align-items: center;
+  display: flex;
+  margin-top: 22px;
+}
+
+.enter > div {
+  margin-right: 16px;
+}
+
+.enter > button {
+
+  flex-grow: 1;
+  min-height: 36px;
+  font-size: 16px;
+}
+
+.loader {
+  border: 6px solid #e7e7e7;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
