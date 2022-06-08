@@ -14,10 +14,8 @@ const Navbar = () => {
   }, [walletAddress])
 
   const connectToWallet = async () => {
-    if (!walletAddress) {
-      const wallet = await requestAccount()
-      setWalletAddress(wallet)
-    }
+    const wallet = await requestAccount()
+    setWalletAddress(wallet)
   }
 
   return (

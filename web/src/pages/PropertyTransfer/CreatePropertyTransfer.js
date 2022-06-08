@@ -1,8 +1,7 @@
 import './CreatePropertyTransfer.css'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ethers } from 'ethers'
-import { useNavigate } from 'react-router-dom'
 
 import { getProvider } from '../../ethereum/provider'
 import { getContractFactory } from '../../ethereum/propertyContract'
@@ -15,26 +14,20 @@ const CreatePropertyTransfer = () => {
   const [price, setPrice] = React.useState('')
   const [buyersAddress, setBuyersAddress] = React.useState('')
 
-  const navigate = useNavigate()
   const provider = getProvider()
-
-  useEffect(() => {
-    if (!loading && localStorage.getItem('walletAddress') === null) {
-      navigate('/')
-    }
-  }, [loading, navigate])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
     setLoading(true)
 
-    const signer = provider.getSigner()
+    const ownerAddress = localStorage.getItem('walletAddress')
+    const signer = provider.getSigner(ownerAddress)
     const contractFactory = getContractFactory(signer)
 
     try {
       const priceInWei = ethers.utils.parseEther(price)
-      await contractFactory.createPropertyTransfer(priceInWei, docName, docUrl, docDescription, buyersAddress)
+      await contractFactory.createPropertyTransfer(priceInWei, docName, docUrl, docDescription, ownerAddress, buyersAddress)
       alert('Contrato criado com sucesso!')
     } catch (err) {
       console.log(err)
@@ -50,7 +43,7 @@ const CreatePropertyTransfer = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: `calc(100vh - 85px)`,
+        height: `calc(100vh - 50px)`,
       }}
     >
       <div>

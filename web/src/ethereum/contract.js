@@ -29,6 +29,7 @@ export const propertyTransferFactoryContractAbi = [
     ],
     stateMutability: 'view',
     type: 'function',
+    constant: true,
   },
   {
     inputs: [
@@ -48,6 +49,7 @@ export const propertyTransferFactoryContractAbi = [
     ],
     stateMutability: 'view',
     type: 'function',
+    constant: true,
   },
   {
     inputs: [],
@@ -61,6 +63,27 @@ export const propertyTransferFactoryContractAbi = [
     ],
     stateMutability: 'view',
     type: 'function',
+    constant: true,
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'pos',
+        type: 'uint256',
+      },
+    ],
+    name: 'getPropertyTransfer',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'contractAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
     inputs: [
@@ -86,6 +109,11 @@ export const propertyTransferFactoryContractAbi = [
       },
       {
         internalType: 'address payable',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address payable',
         name: 'buyer',
         type: 'address',
       },
@@ -100,25 +128,7 @@ export const propertyTransferFactoryContractAbi = [
     ],
     stateMutability: 'payable',
     type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'pos',
-        type: 'uint256',
-      },
-    ],
-    name: 'getPropertyTransfer',
-    outputs: [
-      {
-        internalType: 'address',
-        name: 'contractAddress',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
+    payable: true,
   },
 ]
 
@@ -147,12 +157,42 @@ export const propertyTransferContractAbi = [
       },
       {
         internalType: 'address payable',
+        name: '_owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address payable',
         name: '_buyer',
         type: 'address',
       },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'payerAddress',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'price',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'gas',
+        type: 'uint256',
+      },
+    ],
+    name: 'newPayment',
+    type: 'event',
   },
   {
     inputs: [],
@@ -200,6 +240,19 @@ export const propertyTransferContractAbi = [
       {
         internalType: 'address',
         name: 'ownerAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getBuyer',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'buyerAddress',
         type: 'address',
       },
     ],
@@ -260,6 +313,30 @@ export const propertyTransferContractAbi = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'a',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'b',
+        type: 'string',
+      },
+    ],
+    name: 'concatenate',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'pure',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'signAndPay',
     outputs: [],
@@ -268,4 +345,4 @@ export const propertyTransferContractAbi = [
   },
 ]
 
-export const contractFactoryAddress = '0xCe85DbBd3c10D217d52660E25a7eAe150e13cB5E'
+export const contractFactoryAddress = '0xc165c0265f67949287160091a8356D2AF5cE4659'

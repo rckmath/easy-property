@@ -1,0 +1,23 @@
+.card {
+  background-color: #e5e5e5;
+}
+
+.card-actions > button {
+  border-radius: 4px;
+  color: #ffffff;
+  outline: none;
+  border: none;
+  background: #14213d;
+  flex-grow: 1;
+  min-height: 36px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.card-actions > button:hover {
+  transition: all 0.2s ease-in-out;
+  background: #14213d;
+  color: #e5e5e5;
+}
