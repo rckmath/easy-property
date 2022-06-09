@@ -8,8 +8,9 @@ const Navbar = () => {
   useEffect(() => {
     const wallet = localStorage.getItem('walletAddress')
 
-    if (wallet !== null) {
+    if (wallet !== null || wallet !== walletAddress) {
       setWalletAddress(wallet)
+      requestAccount()
     }
   }, [walletAddress])
 
@@ -23,12 +24,8 @@ const Navbar = () => {
       <Nav>
         <Bars />
         <NavMenu>
-          <NavLink to="/" activeStyle>
-            Criar contrato
-          </NavLink>
-          <NavLink to="/property-transfers" activeStyle>
-            Visualizar contratos
-          </NavLink>
+          <NavLink to="/">Criar contrato</NavLink>
+          <NavLink to="/property-transfers">Visualizar contratos</NavLink>
         </NavMenu>
         <NavBtn>
           <NavBtnLink to="#" onClick={connectToWallet}>

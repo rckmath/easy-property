@@ -1,5 +1,15 @@
 .card {
-  background-color: #e5e5e5;
+  background-color: #f5f5f5;
+}
+
+.card-description {
+  font-size: 11px;
+  overflow: 'hidden';
+  text-overflow: 'ellipsis';
+}
+
+.card-description:hover {
+  overflow: visible;
 }
 
 .card-actions > button {
@@ -14,10 +24,19 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+  text-align: center;
+  align-items: center;
+  align-content: center;
 }
 
 .card-actions > button:hover {
   transition: all 0.2s ease-in-out;
   background: #14213d;
+  color: #e5e5e5;
+}
+
+.card-actions > button:disabled,
+.card-actions > button[disabled] {
+  background-color: #65ff7f;
   color: #e5e5e5;
 }
