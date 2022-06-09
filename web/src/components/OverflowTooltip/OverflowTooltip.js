@@ -23,4 +23,4 @@ const OverflowTip = ({ children }) => {
   )
 }
 
-export default OverflowTip;
+export default OverflowTip

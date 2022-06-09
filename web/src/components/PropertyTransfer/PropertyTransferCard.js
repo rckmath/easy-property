@@ -1,15 +1,17 @@
 import './PropertyTransferCard.css'
 import * as React from 'react'
-import { Box, Card, CardActions, CardContent, Button, Typography, Grid, Tooltip } from '@mui/material'
+
 import PaidIcon from '@mui/icons-material/Paid'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { PropertyTransferStatus } from '../../pages/PropertyTransfer/PropertyTransferListing'
+import { Box, Card, CardActions, CardContent, Button, Typography, Grid } from '@mui/material'
+
 import OverflowTip from '../OverflowTooltip/OverflowTooltip'
+import { PropertyTransferStatus } from '../../pages/PropertyTransfer/PropertyTransferListing'
 
 const PropertyTransferCard = ({ props, payContract }) => {
   return (
-    <Box sx={{ minWidth: 360, maxWidth: 380, boxShadow: '1px 2px 6x #888888', borderRadius: '6px', m: 2 }}>
+    <Box sx={{ minWidth: 380, maxWidth: 400, boxShadow: '1px 2px 6x #888888', borderRadius: '6px', m: 3 }}>
       <Card variant="outlined" sx={{ maxHeight: 260 }}>
         <CardContent className="card">
           <Grid container direction="row" alignItems="center" spacing={2}>

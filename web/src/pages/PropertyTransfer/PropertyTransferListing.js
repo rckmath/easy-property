@@ -20,7 +20,9 @@ const PropertyTransferListing = () => {
   const provider = getProvider()
 
   useEffect(() => {
-    fetchPropertyTransferContracts().catch(console.error)
+    if (!propertyTransfers || !propertyTransfers.length) {
+      fetchPropertyTransferContracts().catch(console.error)
+    }
   }, [propertyTransfers])
 
   const payContract = async (contractAddress, amount) => {
@@ -41,36 +43,31 @@ const PropertyTransferListing = () => {
   }
 
   const fetchPropertyTransferContracts = async () => {
-    if (!propertyTransfers || !propertyTransfers.length) {
-      const signer = provider.getSigner()
-      const contractFactory = getContractFactory(signer)
+    const signer = provider.getSigner()
+    const contractFactory = getContractFactory(signer)
 
-      let contractsCount = await contractFactory.getPropertyTransfersCount()
-      contractsCount = contractsCount.toNumber()
+    let contractsCount = await contractFactory.getPropertyTransfersCount()
+    contractsCount = contractsCount.toNumber()
 
-      let contracts = []
+    let contracts = []
 
-      for (let index = 0; index < contractsCount; index++) {
-        const contractAddress = await contractFactory.getPropertyTransfer(index)
-        const propertyTransfer = getPropertyTransferContract(contractAddress, signer)
-        const [buyer, doc] = await Promise.all([propertyTransfer.getBuyer(), propertyTransfer.getDoc()])
-
-        const contractData = {
-          buyer,
-          contractAddress,
-          owner: doc.owner,
-          url: doc.url,
-          name: doc.name,
-          description: doc.description,
-          price: ethers.utils.formatEther(doc.price),
-          status: doc.owner === buyer ? PropertyTransferStatus.COMPLETED : PropertyTransferStatus.AWAITING_PAYMENT,
-        }
-
-        contracts.push(contractData)
-      }
-
-      setPropertyTransfers([...propertyTransfers, ...contracts])
+    for (let index = 1; index < contractsCount; index++) {
+      const contractAddress = await contractFactory.getPropertyTransfer(index)
+      const propertyTransfer = getPropertyTransferContract(contractAddress, signer)
+      const [buyer, doc] = await Promise.all([propertyTransfer.getBuyer(), propertyTransfer.getDoc()])
+      contracts.push({
+        buyer,
+        contractAddress,
+        owner: doc.owner,
+        url: doc.url,
+        name: doc.name,
+        description: doc.description,
+        price: ethers.utils.formatEther(doc.price),
+        status: doc.owner === buyer ? PropertyTransferStatus.COMPLETED : PropertyTransferStatus.AWAITING_PAYMENT,
+      })
     }
+
+    setPropertyTransfers(contracts)
   }
 
   return (
@@ -88,11 +85,10 @@ const PropertyTransferListing = () => {
         <Box
           sx={{
             m: 2,
-            maxWidth: 360,
+            maxWidth: 400,
             display: 'grid',
             alignItems: 'center',
-            gridAutoColumns: '1fr',
-            gridAutoFlow: 'column',
+            gridTemplateColumns: 'repeat(3, 1fr)',
           }}
         >
           {propertyTransfers.length ? (
