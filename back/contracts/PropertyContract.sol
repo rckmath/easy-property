@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
+import {Helper} from "./HelperLibrary.sol";
+
 contract TransferPropertyFactory {
     address[] public propertyTransfers;
     address public lastPropertyTransferAddress;
@@ -36,7 +38,7 @@ contract TransferPropertyFactory {
         address payable owner,
         address payable buyer
     ) public payable returns (address newContract) {
-        Property p = new Property(
+        TransferProperty p = new TransferProperty(
             price,
             docName,
             docUrl,
@@ -52,7 +54,7 @@ contract TransferPropertyFactory {
     }
 }
 
-contract Property {
+contract TransferProperty {
     event newPayment(address payerAddress, uint256 price, uint256 gas);
 
     struct Doc {
@@ -60,15 +62,15 @@ contract Property {
         string name;
         string url;
         string description;
-        address payable owner;
     }
 
-    address payable buyer;
+    address payable private owner;
+    address payable private buyer;
 
     mapping(address => bool) signedBy;
     mapping(address => bool) isSigner;
 
-    Doc document;
+    Doc private document;
 
     constructor(
         uint256 _price,
@@ -81,97 +83,48 @@ contract Property {
         require(_price > 0, "Price must be greater than zero.");
         require(_owner != _buyer, "The owner can not be the buyer");
 
-        document = Doc(_price, _docName, _docUrl, _docDescription, _owner);
+        document = Doc(_price, _docName, _docUrl, _docDescription);
+        owner = _owner;
         buyer = _buyer;
 
         // Addresses allowed to sign the document (owner and buyer only)
-        isSigner[document.owner] = true;
+        isSigner[owner] = true;
         isSigner[buyer] = true;
 
         // Owner creates the contract so it's signed by him in this moment
-        signedBy[document.owner] = true;
+        signedBy[owner] = true;
     }
 
     function setNewOwner(address _owner) internal {
-        document.owner = payable(_owner);
-    }
-
-    function getName() public view returns (string memory name) {
-        return document.name;
-    }
-
-    function getDescription() public view returns (string memory description) {
-        return document.description;
-    }
-
-    function getUrl() public view returns (string memory url) {
-        return document.url;
-    }
-
-    function getOwner() public view returns (address ownerAddress) {
-        return document.owner;
-    }
-
-    function getBuyer() public view returns (address buyerAddress) {
-        return buyer;
-    }
-
-    function getPrice() public view returns (uint256 price) {
-        return document.price;
+        owner = payable(_owner);
     }
 
     function getDoc() public view returns (Doc memory) {
         return document;
     }
 
-    function concatenate(string memory a, string memory b)
-        public
-        pure
-        returns (string memory)
-    {
-        return string(abi.encodePacked(a, " ", b));
+    function getOwner() public view returns (address ownerAddress) {
+        return owner;
     }
 
-    function uintToStr(uint256 _i)
-        internal
-        pure
-        returns (string memory _uintAsString)
-    {
-        if (_i == 0) {
-            return "0";
-        }
-        uint256 j = _i;
-        uint256 len;
-        while (j != 0) {
-            len++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(len);
-        uint256 k = len;
-        while (_i != 0) {
-            k = k - 1;
-            uint8 temp = (48 + uint8(_i - (_i / 10) * 10));
-            bytes1 b1 = bytes1(temp);
-            bstr[k] = b1;
-            _i /= 10;
-        }
-        return string(bstr);
+    function getBuyer() public view returns (address buyerAddress) {
+        return buyer;
     }
 
     function signAndPay() public payable {
         emit newPayment(msg.sender, msg.value, gasleft());
         require(isSigner[msg.sender], "You are not a signatory.");
         require(!signedBy[msg.sender], "You have already signed.");
-        require(
-            msg.value == document.price,
-            concatenate(
-                "Incorrect amount, please send the exact value for the property price",
-                uintToStr(msg.value)
-            )
+
+        string memory incorrectAmountMsg = Helper.concatenate(
+            "Incorrect amount, please send the exact value for the property price",
+            Helper.uintToStr(msg.value)
         );
 
+        require(msg.value == document.price, incorrectAmountMsg);
+
         signedBy[msg.sender] = true;
-        document.owner.transfer(msg.value);
+        owner.transfer(msg.value);
         setNewOwner(msg.sender);
     }
 }

@@ -4,13 +4,17 @@ import { Nav, NavLink, Bars, NavMenu, NavBtn, NavBtnLink } from './NavbarElement
 
 const Navbar = () => {
   const [walletAddress, setWalletAddress] = useState('')
+  const [walletBalance, setWalletBalance] = useState('')
 
   useEffect(() => {
     const wallet = localStorage.getItem('walletAddress')
+    const isAuthenticated = localStorage.getItem('isAuthenticated')
 
-    if (wallet !== null || wallet !== walletAddress) {
-      setWalletAddress(wallet)
-      requestAccount()
+    if (isAuthenticated && (wallet !== null || wallet !== walletAddress)) {
+      requestAccount().then((wallet) => {
+        setWalletAddress(wallet.address)
+        setWalletBalance(wallet.balance)
+      })
     }
   }, [walletAddress])
 
@@ -29,7 +33,7 @@ const Navbar = () => {
         </NavMenu>
         <NavBtn>
           <NavBtnLink to="#" onClick={connectToWallet}>
-            {walletAddress ? walletAddress : 'Connect wallet'}
+            {walletBalance ? `${walletBalance} ETH` : 'Connect wallet'}
           </NavBtnLink>
         </NavBtn>
       </Nav>

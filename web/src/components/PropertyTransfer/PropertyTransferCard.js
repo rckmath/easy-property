@@ -20,7 +20,7 @@ const PropertyTransferCard = ({ props, payContract }) => {
                 {props.name}
               </Typography>
             </Grid>
-            <Grid item xs={4} style={{ textAlign: 'right', color: '#65ff7f' }}>
+            <Grid item xs={4} style={{ textAlign: 'right', color: '#7ac486' }}>
               {props.status === PropertyTransferStatus.COMPLETED ? <CheckCircleIcon /> : <></>}
             </Grid>
           </Grid>
@@ -31,22 +31,22 @@ const PropertyTransferCard = ({ props, payContract }) => {
             Comprador: {props.buyer}
           </Typography>
           <br />
-          <Typography align="justify" variant="body2" className="card-description">
+          <Typography align="justify" variant="body2" className="card-description" noWrap={true}>
             <OverflowTip>{props.description}</OverflowTip>
           </Typography>
           <a href={props.url} target="_blank" rel="noopener noreferrer">
-            <Typography sx={{ mb: 1.5, fontSize: 10, textOverflow: 'ellipsis' }} color="text.secondary" noWrap="true">
+            <Typography sx={{ mb: 1.5, fontSize: 10, textOverflow: 'ellipsis' }} color="text.secondary" noWrap={true}>
               {props.url}
             </Typography>
           </a>
           <Typography variant="h6" component="div" style={{ textAlign: 'right' }}>
-            {props.price} ETH
+            {parseFloat(props.price).toFixed(2)} ETH
           </Typography>
         </CardContent>
         <CardActions className="card-actions">
           <Button
-            disabled={props.status === PropertyTransferStatus.COMPLETED}
             size="small"
+            disabled={props.status === PropertyTransferStatus.COMPLETED}
             startIcon={props.status !== PropertyTransferStatus.COMPLETED ? <AttachMoneyIcon /> : <PaidIcon />}
             onClick={() => {
               payContract(props.contractAddress, props.price)

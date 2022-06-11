@@ -61,7 +61,9 @@ const CreatePropertyTransfer = () => {
           <input type="text" id="buyersAddress" value={buyersAddress} onChange={(e) => setBuyersAddress(e.target.value)} />
           <div className="enter">
             {loading && <div className="loader"></div>}
-            <button type="submit">Criar contrato de transferência</button>
+            <button type="submit" st>
+              CRIAR CONTRATO DE TRANSFERÊNCIA
+            </button>
           </div>
         </form>
       </div>

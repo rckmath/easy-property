@@ -43,27 +43,26 @@ const PropertyTransferListing = () => {
   }
 
   const fetchPropertyTransferContracts = async () => {
+    const contracts = []
+
     const signer = provider.getSigner()
     const contractFactory = getContractFactory(signer)
+    const contractsCount = (await contractFactory.getPropertyTransfersCount()).toNumber()
 
-    let contractsCount = await contractFactory.getPropertyTransfersCount()
-    contractsCount = contractsCount.toNumber()
-
-    let contracts = []
-
-    for (let index = 1; index < contractsCount; index++) {
+    for (let index = 0; index < contractsCount; index++) {
       const contractAddress = await contractFactory.getPropertyTransfer(index)
       const propertyTransfer = getPropertyTransferContract(contractAddress, signer)
-      const [buyer, doc] = await Promise.all([propertyTransfer.getBuyer(), propertyTransfer.getDoc()])
+      const [owner, buyer, doc] = await Promise.all([propertyTransfer.getOwner(), propertyTransfer.getBuyer(), propertyTransfer.getDoc()])
+
       contracts.push({
         buyer,
+        owner,
         contractAddress,
-        owner: doc.owner,
         url: doc.url,
         name: doc.name,
         description: doc.description,
         price: ethers.utils.formatEther(doc.price),
-        status: doc.owner === buyer ? PropertyTransferStatus.COMPLETED : PropertyTransferStatus.AWAITING_PAYMENT,
+        status: owner === buyer ? PropertyTransferStatus.COMPLETED : PropertyTransferStatus.AWAITING_PAYMENT,
       })
     }
 

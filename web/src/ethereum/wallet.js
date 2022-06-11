@@ -1,3 +1,6 @@
+import { ethers } from 'ethers'
+import { getProvider } from './provider'
+
 export async function requestAccount() {
   console.log('Requesting account...')
 
@@ -7,9 +10,18 @@ export async function requestAccount() {
         method: 'eth_requestAccounts',
       })
 
-      localStorage.setItem('walletAddress', accounts[0])
+      const provider = getProvider()
+      const balance = await provider.getBalance(accounts[0])
+      const formattedBalance = parseFloat(ethers.utils.formatEther(balance)).toFixed(2)
 
-      return accounts[0]
+      localStorage.setItem('walletAddress', accounts[0])
+      localStorage.setItem('walletBalance', formattedBalance)
+      localStorage.setItem('isAuthenticated', true)
+
+      return {
+        address: accounts[0],
+        balance: formattedBalance,
+      }
     } catch (error) {
       console.log('Error connecting...')
     }

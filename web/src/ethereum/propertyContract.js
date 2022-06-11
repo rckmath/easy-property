@@ -1,10 +1,11 @@
 import { ethers } from 'ethers'
-import { contractFactoryAddress, propertyTransferContractAbi, propertyTransferFactoryContractAbi } from './contract'
+
+const { transferPropertyAbi, transferPropertyFactoryAbi, transferPropertyFactoryAddress } = require('./contractsMetadata.json')
 
 export function getContractFactory(signer) {
-  return new ethers.Contract(contractFactoryAddress, propertyTransferFactoryContractAbi, signer)
+  return new ethers.Contract(transferPropertyFactoryAddress, transferPropertyFactoryAbi, signer)
 }
 
 export function getPropertyTransferContract(contractAddress, signer) {
-  return new ethers.Contract(contractAddress, propertyTransferContractAbi, signer)
+  return new ethers.Contract(contractAddress, transferPropertyAbi, signer)
 }
