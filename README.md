@@ -23,3 +23,4 @@ This isn't a real application and it's only a personal study as a lover of block
 - :star: [Truffle](https://trufflesuite.com/) as the contract deploy framework
 - :star: [Ganache](https://trufflesuite.com/ganache/) as a quick run local blockchain for development
 - :star: [React.js](https://reactjs.org/) as the frontend javascript user interface library
+- :star: [Metamask](https://metamask.io/) as the API provider and user's wallet

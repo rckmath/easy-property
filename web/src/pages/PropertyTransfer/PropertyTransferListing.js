@@ -27,7 +27,7 @@ const PropertyTransferListing = () => {
 
   const payContract = async (contractAddress, amount) => {
     try {
-      const address = localStorage.getItem('walletAddress')
+      const address = sessionStorage.getItem('walletAddress')
       const signer = provider.getSigner(address)
       const propertyTransfer = getPropertyTransferContract(contractAddress, signer)
       await propertyTransfer.signAndPay({ value: ethers.utils.parseEther(amount) })
@@ -44,7 +44,6 @@ const PropertyTransferListing = () => {
 
   const fetchPropertyTransferContracts = async () => {
     const contracts = []
-
     const signer = provider.getSigner()
     const contractFactory = getContractFactory(signer)
     const contractsCount = (await contractFactory.getPropertyTransfersCount()).toNumber()
@@ -83,8 +82,7 @@ const PropertyTransferListing = () => {
         <h1>CONTRATOS</h1>
         <Box
           sx={{
-            m: 2,
-            maxWidth: 400,
+            margin: 'auto',
             display: 'grid',
             alignItems: 'center',
             gridTemplateColumns: 'repeat(3, 1fr)',

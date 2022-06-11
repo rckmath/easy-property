@@ -25,13 +25,13 @@ const PropertyTransferCard = ({ props, payContract }) => {
             </Grid>
           </Grid>
           <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
-            Proprietário atual: {props.owner}
+            <strong>Proprietário atual:</strong> {props.owner}
           </Typography>
           <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
-            Comprador: {props.buyer}
+          <strong>Comprador:</strong> {props.buyer}
           </Typography>
           <br />
-          <Typography align="justify" variant="body2" className="card-description" noWrap={true}>
+          <Typography component={'span'} align="justify" variant="body2" className="card-description" noWrap={true}>
             <OverflowTip>{props.description}</OverflowTip>
           </Typography>
           <a href={props.url} target="_blank" rel="noopener noreferrer">

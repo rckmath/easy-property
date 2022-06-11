@@ -51,19 +51,8 @@
   color: #e5e5e5;
 }
 
-.loader {
-  border-top: 6px solid #fcbc56;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
+.enter > button:disabled,
+.enter > button[disabled] {
+  background-color: #e5e5e5;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}

@@ -1,26 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { requestAccount } from '../../ethereum/wallet'
+import { getCurrentAccount, setToStorage } from '../../ethereum/wallet'
 import { Nav, NavLink, Bars, NavMenu, NavBtn, NavBtnLink } from './NavbarElements'
 
 const Navbar = () => {
+  window.ethereum.on('accountsChanged', function(accounts) {
+    setToStorage(accounts)
+      .then((wallet) => {
+        setWallet(wallet)
+      })
+      .catch(console.error)
+  })
+
+  const [loading, setLoading] = useState(false)
   const [walletAddress, setWalletAddress] = useState('')
   const [walletBalance, setWalletBalance] = useState('')
 
   useEffect(() => {
-    const wallet = localStorage.getItem('walletAddress')
+    const wallet = sessionStorage.getItem('walletAddress')
     const isAuthenticated = localStorage.getItem('isAuthenticated')
-
-    if (isAuthenticated && (wallet !== null || wallet !== walletAddress)) {
-      requestAccount().then((wallet) => {
-        setWalletAddress(wallet.address)
-        setWalletBalance(wallet.balance)
-      })
+    if (isAuthenticated === 'true' && (wallet === null || wallet !== walletAddress)) {
+      connectToWallet().catch(console.error)
     }
-  }, [walletAddress])
+  }, [])
 
   const connectToWallet = async () => {
-    const wallet = await requestAccount()
-    setWalletAddress(wallet)
+    if (!loading) {
+      setLoading(true)
+      const wallet = await getCurrentAccount()
+      if (wallet) setWallet(wallet)
+      setLoading(false)
+    }
+  }
+
+  const setWallet = (wallet) => {
+    if (wallet) {
+      setWalletAddress(wallet.address)
+      setWalletBalance(wallet.balance)
+    }
   }
 
   return (
@@ -33,7 +49,7 @@ const Navbar = () => {
         </NavMenu>
         <NavBtn>
           <NavBtnLink to="#" onClick={connectToWallet}>
-            {walletBalance ? `${walletBalance} ETH` : 'Connect wallet'}
+            {walletBalance ? `${walletAddress + ' • ' + walletBalance} ETH` : 'Connect wallet'}
           </NavBtnLink>
         </NavBtn>
       </Nav>

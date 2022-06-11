@@ -34,8 +34,8 @@
 }
 
 .card-actions > button:hover {
-  transition: all 0.2s ease-in-out;
-  background: #202e4b;
+  transition: all 0.15s ease-in-out;
+  background: #4a6bad;
   color: #e5e5e5;
 }
 
