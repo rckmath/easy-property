@@ -3,7 +3,7 @@ import { getCurrentAccount, setToStorage } from '../../ethereum/wallet'
 import { Nav, NavLink, Bars, NavMenu, NavBtn, NavBtnLink } from './NavbarElements'
 
 const Navbar = () => {
-  window.ethereum.on('accountsChanged', function(accounts) {
+  window.ethereum.on('accountsChanged', (accounts) => {
     setToStorage(accounts)
       .then((wallet) => {
         setWallet(wallet)

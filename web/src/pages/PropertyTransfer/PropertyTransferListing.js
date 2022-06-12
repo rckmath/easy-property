@@ -7,7 +7,9 @@ import PropertyTransferCard from '../../components/PropertyTransfer/PropertyTran
 
 import { getProvider } from '../../ethereum/provider'
 import { getContractFactory, getPropertyTransferContract } from '../../ethereum/propertyContract'
+
 import { Box } from '@mui/system'
+import ToastAlert from '../../components/ToastAlert/ToastAlert'
 
 export const PropertyTransferStatus = {
   AWAITING_PAYMENT: 'AWAITING_PAYMENT',
@@ -15,15 +17,24 @@ export const PropertyTransferStatus = {
 }
 
 const PropertyTransferListing = () => {
-  const [propertyTransfers, setPropertyTransfers] = useState([])
-
   const provider = getProvider()
 
+  const [propertyTransfers, setPropertyTransfers] = useState([])
+  const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
+  const [openErrorMessage, setOpenErrorMessage] = useState(false)
+  const [errorMessageContent, setErrorMessageContent] = useState('')
+
   useEffect(() => {
-    if (!propertyTransfers || !propertyTransfers.length) {
+    if (!propertyTransfers.length) {
       fetchPropertyTransferContracts().catch(console.error)
     }
   }, [propertyTransfers])
+
+  const handleCloseToast = (_event, reason) => {
+    if (reason === 'clickaway') return
+    setOpenSuccessMessage(false)
+    setOpenErrorMessage(false)
+  }
 
   const payContract = async (contractAddress, amount) => {
     try {
@@ -31,14 +42,18 @@ const PropertyTransferListing = () => {
       const signer = provider.getSigner(address)
       const propertyTransfer = getPropertyTransferContract(contractAddress, signer)
       await propertyTransfer.signAndPay({ value: ethers.utils.parseEther(amount) })
-      await fetchPropertyTransferContracts()
+      setTimeout(async () => {
+        await fetchPropertyTransferContracts()
+        setOpenSuccessMessage(true)
+      }, 3000)
     } catch (err) {
       if (err && err.data && err.data.message) {
-        alert(err.data.message.split('revert')[1])
+        setErrorMessageContent(err.data.message.split('revert')[1])
       } else {
         console.log(err)
-        alert('Erro desconhecido')
+        setErrorMessageContent('Erro desconhecido')
       }
+      setOpenErrorMessage(true)
     }
   }
 
@@ -79,6 +94,13 @@ const PropertyTransferListing = () => {
       }}
     >
       <div>
+        <ToastAlert
+          openMessage={openSuccessMessage}
+          onClose={handleCloseToast}
+          content="Contrato de transferência pago e assinado com sucesso!"
+          type="success"
+        />
+        <ToastAlert openMessage={openErrorMessage} onClose={handleCloseToast} content={errorMessageContent} type="error" />
         <h1>CONTRATOS</h1>
         <Box
           sx={{
